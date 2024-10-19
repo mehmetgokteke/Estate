@@ -1,4 +1,12 @@
 import customtkinter as ctk
+from Pages import mainpage
+from Pages import customerprofile
+from Pages import customeredit
+from Pages import portfolio
+from Pages import portfolioedit
+from Pages import marketanalysis
+from Pages import calendar
+from Pages import settings
 
 # Ana pencereyi oluştur
 root = ctk.CTk()
@@ -14,27 +22,27 @@ right_frame = ctk.CTkFrame(root)
 right_frame.pack(side="left", fill="both", expand=True)
 
 # Sayfa değiştirme fonksiyonu
-def change_page(page_name):
+def change_page(page_class):
     for widget in right_frame.winfo_children():
         widget.destroy()
-    label = ctk.CTkLabel(right_frame, text=page_name, font=("Arial", 24))
-    label.pack(pady=20)
+    page = page_class(right_frame)
+    page.pack(fill="both", expand=True)
 
-# Buton isimleri ve sayfa başlıkları
+# Buton isimleri ve sayfa sınıfları
 buttons = {
-    "Anasayfa": "Anasayfa",
-    "Müşteri Profili": "Müşteri Profili",
-    "Müşteri Düzenleme": "Müşteri Düzenleme",
-    "Portföy": "Portföy Sayfası",
-    "Portföy Düzenleme": "Portföy Düzenleme",
-    "Piyasa Analizi": "Piyasa Analizi",
-    "Takvim": "Takvim",
-    "Ayarlar": "Ayarlar"
+    "Anasayfa": Anasayfa,
+    "Müşteri Profili": MusteriProfili,
+    "Müşteri Düzenleme": MusteriDuzenleme,
+    "Portföy": Portfoy,
+    "Portföy Düzenleme": PortfoyDuzenleme,
+    "Piyasa Analizi": PiyasaAnalizi,
+    "Takvim": Takvim,
+    "Ayarlar": Ayarlar  
 }
 
 # Butonları oluştur ve sol frame'e ekle
-for button_text, page_name in buttons.items():
-    button = ctk.CTkButton(left_frame, text=button_text, command=lambda p=page_name: change_page(p))
+for button_text, page_class in buttons.items():
+    button = ctk.CTkButton(left_frame, text=button_text, command=lambda p=page_class: change_page(p))
     button.pack(fill="x", padx=10, pady=5)
 
 root.mainloop()
