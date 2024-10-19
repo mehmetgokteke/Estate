@@ -31,13 +31,13 @@ def change_page(page_class):
 # Buton isimleri ve sayfa sınıfları
 buttons = {
     "Anasayfa": mainpage.mainpage,
-    "Müşteri Profili": customerprofile.customerprofile,
-    "Müşteri Düzenleme": customeredit.customeredit,
+    "Müşteri Profili": customerprofile.CustomerProfile,
+    "Müşteri Düzenleme": customeredit.CustomerEdit,
     "Portföy": portfolio.portfolio,
     "Portföy Düzenleme": portfolioedit.portfolioedit,
     "Piyasa Analizi": marketanalysis.marketanalysis,
     "Takvim": calendar.calendar,
-    "Ayarlar": settings.settings  
+    "Ayarlar": settings.settings      
 }
 
 # Butonları oluştur ve sol frame'e ekle

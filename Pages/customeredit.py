@@ -2,107 +2,172 @@ import customtkinter as ctk
 import sqlite3
 from tkinter import messagebox
 
-class customeredit(ctk.CTkFrame):
+class CustomerEdit(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
-        # Giriş alanlarını oluştur
+        # Sol tarafta müşteri ekleme alanı
+        self.label_add = ctk.CTkLabel(self, text="Müşteri Ekle", font=("Arial", 16, "bold"))
+        self.label_add.grid(row=0, column=0, padx=20, pady=10)
+
         self.label_name = ctk.CTkLabel(self, text="Ad Soyad:")
-        self.label_name.pack(pady=5)
+        self.label_name.grid(row=1, column=0, padx=20, pady=5)
         self.entry_name = ctk.CTkEntry(self)
-        self.entry_name.pack(pady=5)
+        self.entry_name.grid(row=1, column=1, padx=20, pady=5)
 
         self.label_tc = ctk.CTkLabel(self, text="TC Kimlik:")
-        self.label_tc.pack(pady=5)
+        self.label_tc.grid(row=2, column=0, padx=20, pady=5)
         self.entry_tc = ctk.CTkEntry(self)
-        self.entry_tc.pack(pady=5)
+        self.entry_tc.grid(row=2, column=1, padx=20, pady=5)
 
         self.label_phone = ctk.CTkLabel(self, text="Telefon:")
-        self.label_phone.pack(pady=5)
+        self.label_phone.grid(row=3, column=0, padx=20, pady=5)
         self.entry_phone = ctk.CTkEntry(self)
-        self.entry_phone.pack(pady=5)
+        self.entry_phone.grid(row=3, column=1, padx=20, pady=5)
 
-        self.label_email = ctk.CTkLabel(self, text="E-posta (isteğe bağlı):")
-        self.label_email.pack(pady=5)
+        self.label_email = ctk.CTkLabel(self, text="E-posta:")
+        self.label_email.grid(row=4, column=0, padx=20, pady=5)
         self.entry_email = ctk.CTkEntry(self)
-        self.entry_email.pack(pady=5)
+        self.entry_email.grid(row=4, column=1, padx=20, pady=5)
 
         self.label_address = ctk.CTkLabel(self, text="İkametgah:")
-        self.label_address.pack(pady=5)
+        self.label_address.grid(row=5, column=0, padx=20, pady=5)
         self.entry_address = ctk.CTkEntry(self)
-        self.entry_address.pack(pady=5)
+        self.entry_address.grid(row=5, column=1, padx=20, pady=5)
 
-        self.label_gender = ctk.CTkLabel(self, text="Cinsiyet:")
-        self.label_gender.pack(pady=5)
-        self.entry_gender = ctk.CTkEntry(self)
-        self.entry_gender.pack(pady=5)
+        # Cinsiyet için Radiobutton grubu
+        self.gender_label = ctk.CTkLabel(self, text="Cinsiyet:")
+        self.gender_label.grid(row=6, column=0, padx=20, pady=5)
+        self.gender_var = ctk.StringVar(value="Erkek")
+        self.gender_male = ctk.CTkRadioButton(self, text="Erkek", variable=self.gender_var, value="Erkek")
+        self.gender_male.grid(row=6, column=1, padx=5, pady=5)
+        self.gender_female = ctk.CTkRadioButton(self, text="Kadın", variable=self.gender_var, value="Kadın")
+        self.gender_female.grid(row=6, column=2, padx=5, pady=5)
 
         self.label_note = ctk.CTkLabel(self, text="Kişisel Not:")
-        self.label_note.pack(pady=5)
+        self.label_note.grid(row=7, column=0, padx=20, pady=5)
         self.entry_note = ctk.CTkEntry(self)
-        self.entry_note.pack(pady=5)
+        self.entry_note.grid(row=7, column=1, padx=20, pady=5)
 
-        # Veritabanına kaydet butonu
-        self.save_button = ctk.CTkButton(self, text="Kaydet", command=self.save_customer)
-        self.save_button.pack(pady=10)
+        # Kaydetme butonu
+        self.save_button = ctk.CTkButton(self, text="Müşteri Ekle", command=self.save_customer)
+        self.save_button.grid(row=8, column=0, padx=20, pady=20)
 
-        # Veritabanındaki kayıtları görme butonu
-        self.view_button = ctk.CTkButton(self, text="Kayıtları Görüntüle", command=self.view_customers)
-        self.view_button.pack(pady=10)
+        # Sağ tarafta otomatik doldurma ve güncelleme alanları
+        self.label_search = ctk.CTkLabel(self, text="TC Kimlik ile Müşteri Ara", font=("Arial", 16, "bold"))
+        self.label_search.grid(row=0, column=3, padx=20, pady=10)
+
+        self.label_search_tc = ctk.CTkLabel(self, text="TC Kimlik:")
+        self.label_search_tc.grid(row=1, column=3, padx=20, pady=5)
+        self.entry_search_tc = ctk.CTkEntry(self)
+        self.entry_search_tc.grid(row=1, column=4, padx=20, pady=5)
+
+        # TC Kimlik ile otomatik doldurma butonu
+        self.search_button = ctk.CTkButton(self, text="Ara", command=self.search_customer)
+        self.search_button.grid(row=2, column=3, padx=20, pady=20)
+
+        # Güncelleme ve silme butonları
+        self.update_button = ctk.CTkButton(self, text="Güncelle", command=self.update_customer)
+        self.update_button.grid(row=8, column=3, padx=20, pady=20)
+
+        self.delete_button = ctk.CTkButton(self, text="Sil", command=self.delete_customer)
+        self.delete_button.grid(row=8, column=4, padx=20, pady=20)
+
+
 
     def save_customer(self):
-        # Veritabanına müşteri bilgilerini kaydetme
+        # Yeni müşteri ekleme fonksiyonu
         name = self.entry_name.get()
         tc_kimlik = self.entry_tc.get()
         phone = self.entry_phone.get()
         email = self.entry_email.get()
         address = self.entry_address.get()
-        gender = self.entry_gender.get()
+        gender = self.gender_var.get()
         personal_note = self.entry_note.get()
 
-        # SQLite bağlantısı
         conn = sqlite3.connect("customers.db")
         cursor = conn.cursor()
 
-        # Veriyi veritabanına ekleme
-        cursor.execute('''INSERT INTO customers (name, tc_kimlik, phone, email, address, gender, personal_note) 
+        cursor.execute('''INSERT INTO customers (name, tc_kimlik, phone, email, address, gender, personal_note)
                         VALUES (?, ?, ?, ?, ?, ?, ?)''', 
                         (name, tc_kimlik, phone, email, address, gender, personal_note))
 
         conn.commit()
         conn.close()
 
-        messagebox.showinfo("Başarılı", "Müşteri bilgileri kaydedildi!")
+        messagebox.showinfo("Başarılı", "Müşteri başarıyla eklendi!")
 
-    def view_customers(self):
-        # Kayıtlı müşterileri gösterme
+    def search_customer(self):
+        # Müşteri arama fonksiyonu
+        tc_kimlik = self.entry_search_tc.get()
+
         conn = sqlite3.connect("customers.db")
         cursor = conn.cursor()
 
-        cursor.execute("SELECT * FROM customers")
-        records = cursor.fetchall()
+        cursor.execute("SELECT * FROM customers WHERE tc_kimlik = ?", (tc_kimlik,))
+        result = cursor.fetchone()
+
+        if result:
+            self.entry_name.delete(0, 'end')
+            self.entry_name.insert(0, result[1])
+
+            self.entry_tc.delete(0, 'end')
+            self.entry_tc.insert(0, result[2])
+
+            self.entry_phone.delete(0, 'end')
+            self.entry_phone.insert(0, result[3])
+
+            self.entry_email.delete(0, 'end')
+            self.entry_email.insert(0, result[4])
+
+            self.entry_address.delete(0, 'end')
+            self.entry_address.insert(0, result[5])
+
+            self.gender_var.set(result[6])
+
+            self.entry_note.delete(0, 'end')
+            self.entry_note.insert(0, result[7])
+
+        else:
+            messagebox.showwarning("Hata", "Müşteri bulunamadı!")
+
         conn.close()
 
-        # Kayıtları gösterecek yeni pencere oluştur
-        records_window = ctk.CTkToplevel(self)
-        records_window.geometry("800x400")
-        records_window.title("Müşteri Kayıtları")
+    def update_customer(self):
+        # Müşteri güncelleme fonksiyonu
+        name = self.entry_name.get()
+        tc_kimlik = self.entry_tc.get()
+        phone = self.entry_phone.get()
+        email = self.entry_email.get()
+        address = self.entry_address.get()
+        gender = self.gender_var.get()
+        personal_note = self.entry_note.get()
 
-        # Pencereyi önde tutma
-        records_window.focus_force()
-        records_window.grab_set()  # Diğer pencerelerin üzerine çıkmasını sağlar
+        conn = sqlite3.connect("customers.db")
+        cursor = conn.cursor()
 
-        # Başlıkları oluştur (sütun isimleri)
-        column_headers = ["ID", "Ad Soyad", "TC Kimlik", "Telefon", "E-posta", "İkametgah", "Cinsiyet", "Kişisel Not"]
+        cursor.execute('''UPDATE customers 
+                          SET name=?, phone=?, email=?, address=?, gender=?, personal_note=?
+                          WHERE tc_kimlik=?''', 
+                          (name, phone, email, address, gender, personal_note, tc_kimlik))
 
-        # Sütun başlıklarını ekle
-        for i, header in enumerate(column_headers):
-            label = ctk.CTkLabel(records_window, text=header, font=("Arial", 12, "bold"))
-            label.grid(row=0, column=i, padx=5, pady=5)
+        conn.commit()
+        conn.close()
 
-        # Kayıtları satır ve sütun olarak yerleştir
-        for row_index, record in enumerate(records):
-            for col_index, value in enumerate(record):
-                label = ctk.CTkLabel(records_window, text=value, font=("Arial", 10))
-                label.grid(row=row_index + 1, column=col_index, padx=5, pady=5)
+        messagebox.showinfo("Başarılı", "Müşteri başarıyla güncellendi!")
+
+    def delete_customer(self):
+        # Müşteri silme fonksiyonu
+        tc_kimlik = self.entry_search_tc.get()
+
+        conn = sqlite3.connect("customers.db")
+        cursor = conn.cursor()
+
+        cursor.execute("DELETE FROM customers WHERE tc_kimlik = ?", (tc_kimlik,))
+
+        conn.commit()
+        conn.close()
+
+        messagebox.showinfo("Başarılı", "Müşteri başarıyla silindi!")
+    
 
