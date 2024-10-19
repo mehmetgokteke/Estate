@@ -30,19 +30,19 @@ def change_page(page_class):
 
 # Buton isimleri ve sayfa sınıfları
 buttons = {
-    "Anasayfa": Anasayfa,
-    "Müşteri Profili": MusteriProfili,
-    "Müşteri Düzenleme": MusteriDuzenleme,
-    "Portföy": Portfoy,
-    "Portföy Düzenleme": PortfoyDuzenleme,
-    "Piyasa Analizi": PiyasaAnalizi,
-    "Takvim": Takvim,
-    "Ayarlar": Ayarlar  
+    "Anasayfa": mainpage.mainpage,
+    "Müşteri Profili": customerprofile.customerprofile,
+    "Müşteri Düzenleme": customeredit.customeredit,
+    "Portföy": portfolio.portfolio,
+    "Portföy Düzenleme": portfolioedit.portfolioedit,
+    "Piyasa Analizi": marketanalysis.marketanalysis,
+    "Takvim": calendar.calendar,
+    "Ayarlar": settings.settings  
 }
 
 # Butonları oluştur ve sol frame'e ekle
 for button_text, page_class in buttons.items():
-    button = ctk.CTkButton(left_frame, text=button_text, command=lambda p=page_class: change_page(p))
+    button = ctk.CTkButton(left_frame, text=button_text, command=lambda p=page_class: change_page(p),fg_color="yellow",text_color="black")
     button.pack(fill="x", padx=10, pady=5)
 
 root.mainloop()

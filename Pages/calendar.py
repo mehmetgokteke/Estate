@@ -5,3 +5,4 @@ class calendar(ctk.CTkFrame):
         super().__init__(parent)
         label = ctk.CTkLabel(self, text="Takvim", font=("Arial", 24))
         label.pack(pady=20)
+        
