@@ -1,5 +1,7 @@
 import customtkinter as ctk
 import tkinter as tk
+import sqlite3
+from tkinter import messagebox
 from Pages import mainpage
 from Pages import customerprofile
 from Pages import customeredit
@@ -8,13 +10,13 @@ from Pages import portfolioedit
 from Pages import marketanalysis
 from Pages import calendar
 from Pages import settings
-
+from password import PasswordEntry
 class Estate(ctk.CTk):
-    def _init_(self):
-        super()._init_()
+    def __init__(self):
+        super().__init__()
         self.geometry("1500x750")
         self.minsize(1500, 750)
-        self.title("Emlak Yönetim Sistemi (EYS)")
+        self.title("Emlak Yönetim Sistemi (EYS)"    )
         # self.iconbitmap("")  # İkon eklemek için
 
         # Tam ekran moduna geçiş
@@ -43,13 +45,13 @@ class Estate(ctk.CTk):
         # Buton isimleri ve sayfa sınıfları
         self.buttons = {
             "Anasayfa": mainpage.mainpage,
-            "Müşteri Profili": customerprofile.customerprofile,
-            "Müşteri Düzenleme": customeredit.customeredit,
+            "Müşteri Profili": customerprofile.CustomerProfile,
+            "Müşteri Düzenleme": customeredit.CustomerEdit,
             "Portföy": portfolio.portfolio,
             "Portföy Düzenleme": portfolioedit.portfolioedit,
             "Piyasa Analizi": marketanalysis.marketanalysis,
             "Takvim": calendar.calendar,
-            "Ayarlar": settings.settings  
+            "Ayarlar": settings.Settings  
         }
 
         # Butonları oluştur
@@ -70,15 +72,8 @@ class Estate(ctk.CTk):
         )
         self.switch.place(relx=0.019, rely=1.0, anchor=tk.SW)
 
-    def toggle_fullscreen(self, event=None):
-        """Tam ekran modunu açar veya kapatır."""
-        self.fullscreen = not self.fullscreen
-        self.attributes("-fullscreen", self.fullscreen)
-
-    def exit_fullscreen(self, event=None):
-        """Tam ekran modundan çıkar."""
-        self.fullscreen = False
-        self.attributes("-fullscreen", False)
+        # Uygulama şifre kontrolü
+        self.check_password()
 
     def create_buttons(self):
         """Sol frame'e butonları oluştur ve ekle."""
@@ -96,11 +91,55 @@ class Estate(ctk.CTk):
             )
             button.pack(fill="x", padx=25, pady=20)
 
+            # Ayarlar butonu için özel durum
+            if button_text == "Ayarlar":
+                self.settings_button = button
+
+    def check_password(self):
+        """Veritabanındaki şifreyi kontrol eder ve gerekirse şifre giriş penceresini açar."""
+        conn = sqlite3.connect('estateagentsettings.db')
+        cursor = conn.cursor()
+
+        # Şifreyi sorgula
+        cursor.execute("SELECT uygulama_sifre FROM estateagentsettings WHERE id=1")
+        stored_password = cursor.fetchone()
+
+        if stored_password is None or stored_password[0] is None or stored_password[0] == "":
+            conn.close()
+            self.settings_button.configure(
+                text="⚠️ Ayarlar",
+                text_color="red"
+            )
+            self.show_security_message()
+            return
+        
+        self.password_window = PasswordEntry()
+        self.wait_window(self.password_window)
+        conn.close()
+    
+    def show_security_message(self):
+        messagebox.showinfo(
+            "Güvenlik Uyarısı", 
+            "Uygulama şifresi koymak, güvenliğinizi artıracaktır. Lütfen ayarlar kısmından bir şifre ekleyin.")
+
+    def toggle_fullscreen(self, event=None):
+        """Tam ekran modunu açar veya kapatır."""
+        self.fullscreen = not self.fullscreen
+        self.attributes("-fullscreen", self.fullscreen)
+
+    def exit_fullscreen(self, event=None):
+        """Tam ekran modundan çıkar."""
+        self.fullscreen = False
+        self.attributes("-fullscreen", False)
+
     def change_page(self, page_class):
         """Sayfa değiştirme fonksiyonu."""
         for widget in self.right_frame.winfo_children():
             widget.destroy()
-        page = page_class(self.right_frame)
+        if page_class == settings.Settings:
+            page = page_class(self.right_frame, self.settings_button)
+        else:
+            page = page_class(self.right_frame)
         page.pack(fill="both", expand=True)
 
     def switch_event(self):
@@ -112,6 +151,6 @@ class Estate(ctk.CTk):
             ctk.set_appearance_mode("light")
             self.switch.configure(text="Light Mode")
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     app = Estate()
     app.mainloop()
