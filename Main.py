@@ -19,48 +19,41 @@ class Estate(ctk.CTk):
         self.title("Emlak Yönetim Sistemi (EYS)"    )
         # self.iconbitmap("")  # İkon eklemek için
 
-        # Tam ekran moduna geçiş
         self.fullscreen = False
         self.bind("<F11>", self.toggle_fullscreen)
         self.bind("<Escape>", self.exit_fullscreen)
 
-        # Frame'leri oluştur
         self.left_frame = ctk.CTkFrame(self)
         self.left_frame.pack(side="left", fill="y")
 
         self.right_frame = ctk.CTkFrame(self)
         self.right_frame.pack(side="right", fill="both", expand=True)
 
-        # Başlık için logo veya uygulama ismi
         self.logo_label = ctk.CTkLabel(
         self.left_frame,
-        text="Emlak Yönetim Sistemi",
+        text="🏠 Emlak Yönetim Sistemi 🏠",
         font=("Arial", 25, "bold"),
-        text_color="#9C27B0",
+        text_color="#000000",
         corner_radius=10,
-        fg_color="#FFEBEE"
+        fg_color="#40E0D0"
         )
         self.logo_label.pack(padx=10, pady=25)
 
-        # Buton isimleri ve sayfa sınıfları
         self.buttons = {
-            "Anasayfa": mainpage.mainpage,
-            "Müşteri Profili": customerprofile.CustomerProfile,
-            "Müşteri Düzenleme": customeredit.CustomerEdit,
-            "Portföy": portfolio.portfolio,
-            "Portföy Düzenleme": portfolioedit.portfolioedit,
-            "Piyasa Analizi": marketanalysis.marketanalysis,
-            "Takvim": calendar.calendar,
-            "Ayarlar": settings.Settings  
+            "🏠 Anasayfa": mainpage.mainpage,
+            "👤 Müşteri Profili": customerprofile.CustomerProfile,
+            "📋 Müşteri Düzenleme": customeredit.CustomerEdit,
+            "📂 Portföy": portfolio.portfolio,
+            "📝 Portföy Düzenleme": portfolioedit.portfolioedit,
+            "📊 Piyasa Analizi": marketanalysis.marketanalysis,
+            "📅 Takvim": calendar.calendar,
+            "⚙️ Ayarlar": settings.Settings  
         }
 
-        # Butonları oluştur
         self.create_buttons()
 
-        # Sağ frame'deki içeriklerin başlangıç durumu
         self.change_page(mainpage.mainpage)
 
-        # Switch değişkeni
         self.switch_var = ctk.StringVar(value="off")
         self.switch = ctk.CTkSwitch(
             self.left_frame, 
@@ -72,7 +65,6 @@ class Estate(ctk.CTk):
         )
         self.switch.place(relx=0.019, rely=1.0, anchor=tk.SW)
 
-        # Uygulama şifre kontrolü
         self.check_password()
 
     def create_buttons(self):
@@ -84,15 +76,14 @@ class Estate(ctk.CTk):
                 command=lambda p=page_class: self.change_page(p),
                 fg_color="#00BCD4",
                 hover_color="#388E3C",
-                text_color="white",
-                font=("Arial", 17),
+                text_color="#000000",
+                font=("Arial", 18),
                 corner_radius=50,
                 height=40
             )
             button.pack(fill="x", padx=25, pady=20)
 
-            # Ayarlar butonu için özel durum
-            if button_text == "Ayarlar":
+            if button_text == "⚙️ Ayarlar":
                 self.settings_button = button
 
     def check_password(self):
@@ -100,14 +91,13 @@ class Estate(ctk.CTk):
         conn = sqlite3.connect('estateagentsettings.db')
         cursor = conn.cursor()
 
-        # Şifreyi sorgula
         cursor.execute("SELECT uygulama_sifre FROM estateagentsettings WHERE id=1")
         stored_password = cursor.fetchone()
 
         if stored_password is None or stored_password[0] is None or stored_password[0] == "":
             conn.close()
             self.settings_button.configure(
-                text="⚠️ Ayarlar",
+                text="❗ Ayarlar",
                 text_color="red"
             )
             self.show_security_message()
