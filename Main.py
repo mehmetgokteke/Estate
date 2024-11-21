@@ -140,6 +140,7 @@ class Estate(ctk.CTk):
         else:
             ctk.set_appearance_mode("light")
             self.switch.configure(text="Light Mode")
+            
 
 if __name__ == "__main__":
     app = Estate()
