@@ -95,6 +95,7 @@ class PasswordEntry(ctk.CTkToplevel):
     def on_close(self):
         """Kapatma işlemi sırasında uygulamanın tamamen kapanmasını sağlar."""
         if messagebox.askquestion("Çıkış", "Uygulamayı kapatmak istediğinize emin misiniz?") == 'yes':
+            self.master.withdraw()
             self.destroy()
             exit()
         else:
