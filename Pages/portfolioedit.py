@@ -317,31 +317,50 @@ class portfolioedit(ctk.CTkFrame):
 
 
     def delete_portfolio(self):
+        # TC kimlik doğrulaması
         tc_kimlik = self.ask_for_tc_kimlik()
+
         if not tc_kimlik:
             messagebox.showerror("Hata", "Geçersiz TC kimliği.")
             return
 
-        conn = sqlite3.connect("portfolio.db")
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM portfolio WHERE tc_kimlik = ?", (tc_kimlik,))
-        results = cursor.fetchall()
-        conn.close()
+        # Veritabanı bağlantısı
+        try:
+            conn = sqlite3.connect("portfolio.db")
+            cursor = conn.cursor()
+
+            # Veritabanında kayıt arama
+            cursor.execute("SELECT * FROM portfolio WHERE tc_kimlik = ?", (tc_kimlik,))
+            results = cursor.fetchall()
+            conn.close()
+        except Exception as e:
+            messagebox.showerror("Hata", f"Veritabanı hatası: {e}")
+            return
 
         if results:
             def delete_selected(selected_rows):
-                conn = sqlite3.connect("portfolio.db")
-                cursor = conn.cursor()
-                for checkbox, row_id in selected_rows:
-                    if checkbox.get():  # Eğer checkbox seçiliyse
-                        cursor.execute("DELETE FROM portfolio WHERE id = ?", (row_id,))
-                conn.commit()
-                conn.close()
-                messagebox.showinfo("Başarılı", "Seçilen kayıt(lar) silindi.")
+                try:
+                    conn = sqlite3.connect("portfolio.db")
+                    cursor = conn.cursor()
 
-            self.show_table(results, "Portföy Sil", on_delete=delete_selected)
+                    for checkbox, row_id in selected_rows:
+                        if checkbox.get():  # Eğer checkbox seçiliyse
+                            cursor.execute("DELETE FROM portfolio WHERE id = ?", (row_id,))
+
+                    conn.commit()
+                    conn.close()
+                    messagebox.showinfo("Başarılı", "Seçilen kayıt(lar) silindi.")
+                except Exception as e:
+                    messagebox.showerror("Hata", f"Silme işlemi sırasında hata: {e}")
+
+            # Show table fonksiyonunu çağırmak ve on_delete parametresini vermek
+            try:
+                self.show_table(results, "Portföy Sil", on_delete=delete_selected)
+            except Exception as e:
+                messagebox.showerror("Hata", f"Tablo gösterim hatası: {e}")
         else:
             messagebox.showerror("Hata", "Girilen TC kimliğine ait kayıt bulunamadı.")
+
 
 
     def show_table(self, data, title, editable=False, on_save=None, include_all_columns=False):
