@@ -140,7 +140,7 @@ class CustomerEdit(ctk.CTkFrame):
             conn.commit()
             messagebox.showinfo("Başarılı", "Müşteri başarıyla eklendi!")
         except Exception as e:
-            messagebox.showerror("Hata", f"Müşteri eklenirken bir hata oluştu: {e}")
+            messagebox.showerror("Hata", f"TC kimlik zaten mevcut!")
         finally:
             conn.close()
 
@@ -206,7 +206,7 @@ class CustomerEdit(ctk.CTkFrame):
             conn.commit()
             messagebox.showinfo("Başarılı", "Müşteri başarıyla güncellendi!")
         except Exception as e:
-            messagebox.showerror("Hata", f"Müşteri güncellenirken bir hata oluştu: {e}")
+            messagebox.showerror("Hata", f"Müşteri güncellenemedi!")
         finally:
             conn.close()
 
@@ -223,6 +223,6 @@ class CustomerEdit(ctk.CTkFrame):
             conn.commit()
             messagebox.showinfo("Başarılı", "Müşteri başarıyla silindi!")
         except Exception as e:
-            messagebox.showerror("Hata", f"Müşteri silinirken bir hata oluştu: {e}")
+            messagebox.showerror("Hata", f"Böyle bir müşteri mevcut değil!")
         finally:
             conn.close()
