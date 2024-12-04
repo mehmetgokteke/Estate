@@ -1,7 +1,6 @@
 import customtkinter as ctk
 from tkinter import messagebox
 import sqlite3
-
 class PasswordEntry(ctk.CTkToplevel):
     def __init__(self):
         super().__init__()
@@ -61,11 +60,9 @@ class PasswordEntry(ctk.CTkToplevel):
         self.password_visible = False
 
     def enter_pressed(self, event):
-        """Enter tuşuna basıldığında check_password fonksiyonunu çağırır."""
         self.check_password()
 
     def toggle_password_visibility(self):
-        """Şifre giriş alanının görünürlüğünü değiştirir."""
         self.password_visible = not self.password_visible
         if self.password_visible:
             self.password_entry.configure(show="")
@@ -75,7 +72,6 @@ class PasswordEntry(ctk.CTkToplevel):
             self.show_password_button.configure(fg_color="#00ACC1")
 
     def check_password(self):
-        """Veritabanındaki şifre ile karşılaştırır ve giriş izni verir."""
         password = self.password_entry.get()
 
         conn = sqlite3.connect('estateagentsettings.db')
@@ -93,7 +89,6 @@ class PasswordEntry(ctk.CTkToplevel):
         conn.close()
 
     def on_close(self):
-        """Kapatma işlemi sırasında uygulamanın tamamen kapanmasını sağlar."""
         if messagebox.askquestion("Çıkış", "Uygulamayı kapatmak istediğinize emin misiniz?") == 'yes':
             self.master.withdraw()
             self.destroy()
