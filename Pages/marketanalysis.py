@@ -1068,43 +1068,29 @@ class marketanalysis(ctk.CTkFrame):
 
     def show_analysis_results(self, kategori1, kategori2, kategori3):
         messagebox.showinfo("Genel Bilgiler", "FIRSAT İLANLAR: Fiyat ortalamasının %25 altında ve aynı zamanda m2 ortalamasının %25 üstünde olan ilanlar gösterilir.\n\nÖNERİLEN İLANLAR: Fiyat ortalamasının altında ve aynı zamanda m2 ortalamasının üstünde olan ilanlar gösterilir.\n\nDÜŞÜK FİYATLI İLANLAR: Fiyat ortalamasının %25 altında olan ilanlar gösterilir.\n\nNOT: İlan No kısmına tıklayarak istenilen ilanın web sayfasına gidilebilir.")
-        self.results_window = tk.Toplevel(self)
+        self.results_window = ctk.CTkToplevel(self)
         self.results_window.title("Öneri")
-        self.results_window.geometry("400x600")
+        self.results_window.geometry("425x600")
         self.results_window.resizable(False, False)
         
-        self.results_window.protocol("WM_DELETE_WINDOW", lambda: self.close_results_window())
-        
-        canvas = tk.Canvas(self.results_window)
-        scrollbar = tk.Scrollbar(self.results_window, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas)
-        
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-        )
-        
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-        
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
+        scrollable_frame = ctk.CTkScrollableFrame(self.results_window, width=480, height=580)
+        scrollable_frame.pack(fill="both", expand=True, padx=10, pady=10)
         
         if kategori1:
-            tk.Label(scrollable_frame, text="Fırsat İlanlar", font=("Arial", 14, "bold")).pack(pady=10)
-            frame1 = tk.Frame(scrollable_frame)
+            ctk.CTkLabel(scrollable_frame, text=" Fırsat İlanlar ", fg_color="#F2545B", text_color="black", font=("Arial", 14, "bold")).pack(pady=10)
+            frame1 = ctk.CTkFrame(scrollable_frame)
             frame1.pack(fill="x", padx=75, pady=(0,30))
             self.populate_analysis_table(kategori1, frame1, ["İlan No", "Fiyat (TL)", "M²", "Fiyat/M²"])
         
         if kategori2:
-            tk.Label(scrollable_frame, text="Önerilen İlanlar", font=("Arial", 14, "bold")).pack(pady=10)
-            frame2 = tk.Frame(scrollable_frame)
+            ctk.CTkLabel(scrollable_frame, text=" Önerilen İlanlar ", fg_color="#F6C91B", text_color="black", font=("Arial", 14, "bold")).pack(pady=10)
+            frame2 = ctk.CTkFrame(scrollable_frame)
             frame2.pack(fill="x", padx=75, pady=(0,30))
             self.populate_analysis_table(kategori2, frame2, ["İlan No", "Fiyat (TL)", "M²", "Fiyat/M²"])
         
         if kategori3:
-            tk.Label(scrollable_frame, text="Düşük Fiyatlı İlanlar", font=("Arial", 14, "bold")).pack(pady=10)
-            frame3 = tk.Frame(scrollable_frame)
+            ctk.CTkLabel(scrollable_frame, text=" Düşük Fiyatlı İlanlar ", fg_color="#3BBF9F", text_color="black", font=("Arial", 14, "bold")).pack(pady=10)
+            frame3 = ctk.CTkFrame(scrollable_frame)
             frame3.pack(fill="x", padx=75, pady=(0,30))
             self.populate_analysis_table(kategori3, frame3, ["İlan No", "Fiyat (TL)", "M²", "Fiyat/M²"])
 
@@ -1115,14 +1101,20 @@ class marketanalysis(ctk.CTkFrame):
 
     def populate_analysis_table(self, data, parent_frame, headers):
         for col, header in enumerate(headers):
-            tk.Label(parent_frame, text=header, font=("Arial", 12, "bold"), borderwidth=2, relief="solid").grid(row=0, column=col, sticky="nsew")
+            ctk.CTkLabel(
+                parent_frame,
+                text=header,
+                font=("Arial", 12, "bold"),
+                corner_radius=5,
+                fg_color="#dcdcdc"
+            ).grid(row=0, column=col, sticky="nsew", padx=5, pady=5)
 
         for row, row_data in enumerate(data, start=1):
             for col, value in enumerate(row_data):
                 if col == 3:
                     value = round(value)
-                label = tk.Label(parent_frame, text=value, font=("Arial", 10), borderwidth=1, relief="solid")
-                label.grid(row=row, column=col, sticky="nsew")
+                label = ctk.CTkLabel(parent_frame, text=value, font=("Arial", 10))
+                label.grid(row=row, column=col, sticky="nsew", padx=5, pady=5)
                 if col == 0:
                     label.bind("<Button-1>", lambda event, ilan_no=row_data[0]: self.open_property_page(ilan_no))
 
