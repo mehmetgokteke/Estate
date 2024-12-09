@@ -13,7 +13,7 @@ class CustomerEdit(ctk.CTkFrame):
             font=("Helvetica", 30, "bold"),
             text_color="#000000",
             fg_color="#00BCD4",  # Arka plan rengi
-            corner_radius=15,
+            corner_radius=20,
         )
 
         # Başlığın yerleşimi ve boyutlandırma
@@ -21,79 +21,79 @@ class CustomerEdit(ctk.CTkFrame):
 
         # Sol tarafta müşteri ekleme alanı
         self.label_add = ctk.CTkLabel(
-            self, text="Müşteri Ekle", font=("Arial", 16, "bold"), text_color="#FFFFFF", fg_color="#00BCD4", corner_radius=8
+            self, text="Müşteri Ekle", font=("Arial", 16, "bold"), text_color="#FFFFFF", fg_color="#00BCD4", corner_radius=20
         )
         self.label_add.grid(row=1, column=0, columnspan=5, padx=20, pady=10, sticky="ew")
 
-        self.label_name = ctk.CTkLabel(self, text="Ad Soyad:")
+        self.label_name = ctk.CTkLabel(self, text="Ad Soyad:", corner_radius=20)
         self.label_name.grid(row=2, column=0, padx=20, pady=5, sticky="w")
-        self.entry_name = ctk.CTkEntry(self)
+        self.entry_name = ctk.CTkEntry(self, corner_radius=20)
         self.entry_name.grid(row=2, column=1, columnspan=4, padx=20, pady=5, sticky="ew")
 
-        self.label_tc = ctk.CTkLabel(self, text="TC Kimlik:")
+        self.label_tc = ctk.CTkLabel(self, text="TC Kimlik:", corner_radius=20)
         self.label_tc.grid(row=3, column=0, padx=20, pady=5, sticky="w")
-        self.entry_tc = ctk.CTkEntry(self)
+        self.entry_tc = ctk.CTkEntry(self, corner_radius=20)
         self.entry_tc.grid(row=3, column=1, columnspan=4, padx=20, pady=5, sticky="ew")
 
-        self.label_phone = ctk.CTkLabel(self, text="Telefon:")
+        self.label_phone = ctk.CTkLabel(self, text="Telefon:", corner_radius=20)
         self.label_phone.grid(row=4, column=0, padx=20, pady=5, sticky="w")
-        self.entry_phone = ctk.CTkEntry(self)
+        self.entry_phone = ctk.CTkEntry(self, corner_radius=20)
         self.entry_phone.grid(row=4, column=1, columnspan=4, padx=20, pady=5, sticky="ew")
 
-        self.label_email = ctk.CTkLabel(self, text="E-posta:")
+        self.label_email = ctk.CTkLabel(self, text="E-posta:", corner_radius=20)
         self.label_email.grid(row=5, column=0, padx=20, pady=5, sticky="w")
-        self.entry_email = ctk.CTkEntry(self)
+        self.entry_email = ctk.CTkEntry(self, corner_radius=20)
         self.entry_email.grid(row=5, column=1, columnspan=4, padx=20, pady=5, sticky="ew")
 
-        self.label_address = ctk.CTkLabel(self, text="İkametgah:")
+        self.label_address = ctk.CTkLabel(self, text="İkametgah:", corner_radius=20)
         self.label_address.grid(row=6, column=0, padx=20, pady=5, sticky="w")
-        self.entry_address = ctk.CTkEntry(self)
+        self.entry_address = ctk.CTkEntry(self, corner_radius=20)
         self.entry_address.grid(row=6, column=1, columnspan=4, padx=20, pady=5, sticky="ew")
 
         # Yaş için etiket ve giriş alanı
-        self.label_age = ctk.CTkLabel(self, text="Yaş:")
+        self.label_age = ctk.CTkLabel(self, text="Yaş:", corner_radius=20)
         self.label_age.grid(row=7, column=0, padx=20, pady=5, sticky="w")
-        self.entry_age = ctk.CTkEntry(self)
+        self.entry_age = ctk.CTkEntry(self, corner_radius=20)
         self.entry_age.grid(row=7, column=1, columnspan=4, padx=20, pady=5, sticky="ew")
 
         # Cinsiyet için Radiobutton grubu
-        self.gender_label = ctk.CTkLabel(self, text="Cinsiyet:")
+        self.gender_label = ctk.CTkLabel(self, text="Cinsiyet:", corner_radius=20)
         self.gender_label.grid(row=8, column=0, padx=20, pady=5, sticky="w")
         self.gender_var = ctk.StringVar(value="Erkek")
-        self.gender_male = ctk.CTkRadioButton(self, text="Erkek", variable=self.gender_var, value="Erkek")
+        self.gender_male = ctk.CTkRadioButton(self, text="Erkek", variable=self.gender_var, value="Erkek", corner_radius=20)
         self.gender_male.grid(row=8, column=1, padx=5, pady=5, sticky="w")
-        self.gender_female = ctk.CTkRadioButton(self, text="Kadın", variable=self.gender_var, value="Kadın")
+        self.gender_female = ctk.CTkRadioButton(self, text="Kadın", variable=self.gender_var, value="Kadın", corner_radius=20)
         self.gender_female.grid(row=8, column=2, padx=5, pady=5, sticky="w")
 
-        self.label_note = ctk.CTkLabel(self, text="Kişisel Not:")
+        self.label_note = ctk.CTkLabel(self, text="Kişisel Not:", corner_radius=20)
         self.label_note.grid(row=9, column=0, padx=20, pady=5, sticky="w")
-        self.entry_note = ctk.CTkEntry(self)
+        self.entry_note = ctk.CTkEntry(self, corner_radius=20)
         self.entry_note.grid(row=9, column=1, columnspan=4, padx=20, pady=5, sticky="ew")
 
         # Kaydetme butonu
-        self.save_button = ctk.CTkButton(self, text="Müşteri Ekle", command=self.save_customer)
+        self.save_button = ctk.CTkButton(self, text="Müşteri Ekle", command=self.save_customer, corner_radius=20)
         self.save_button.grid(row=10, column=0, columnspan=5, padx=20, pady=20, sticky="ew")
 
         # Sağ tarafta otomatik doldurma ve güncelleme alanları
         self.label_search = ctk.CTkLabel(
-            self, text="TC Kimlik ile Müşteri Ara", font=("Arial", 16, "bold"), text_color="#FFFFFF", fg_color="#00BCD4", corner_radius=8
+            self, text="TC Kimlik ile Müşteri Ara", font=("Arial", 16, "bold"), text_color="#FFFFFF", fg_color="#00BCD4", corner_radius=20
         )
         self.label_search.grid(row=1, column=5, columnspan=5, padx=20, pady=10, sticky="ew")
 
-        self.label_search_tc = ctk.CTkLabel(self, text="TC Kimlik:")
+        self.label_search_tc = ctk.CTkLabel(self, text="TC Kimlik:", corner_radius=20)
         self.label_search_tc.grid(row=2, column=5, padx=20, pady=5, sticky="w")
-        self.entry_search_tc = ctk.CTkEntry(self)
+        self.entry_search_tc = ctk.CTkEntry(self, corner_radius=20)
         self.entry_search_tc.grid(row=2, column=6, columnspan=3, padx=20, pady=5, sticky="ew")
 
         # TC Kimlik ile otomatik doldurma butonu
-        self.search_button = ctk.CTkButton(self, text="Ara", command=self.search_customer)
+        self.search_button = ctk.CTkButton(self, text="Ara", command=self.search_customer, corner_radius=20)
         self.search_button.grid(row=3, column=5, columnspan=5, padx=20, pady=10, sticky="ew")
 
         # Güncelleme ve silme butonları
-        self.update_button = ctk.CTkButton(self, text="Güncelle", command=self.update_customer)
+        self.update_button = ctk.CTkButton(self, text="Güncelle", command=self.update_customer, corner_radius=20)
         self.update_button.grid(row=10, column=5, columnspan=2, padx=20, pady=20, sticky="ew")
 
-        self.delete_button = ctk.CTkButton(self, text="Sil", command=self.delete_customer)
+        self.delete_button = ctk.CTkButton(self, text="Sil", command=self.delete_customer, corner_radius=20)
         self.delete_button.grid(row=10, column=7, columnspan=2, padx=20, pady=20, sticky="ew")
 
         # Dikey ve yatay yönlerde boşlukları sıfırlamak için 'sticky' kullanımı
@@ -129,20 +129,35 @@ class CustomerEdit(ctk.CTkFrame):
         gender = self.gender_var.get()
         personal_note = self.entry_note.get()
 
+        # personal_note uzunluğunu kontrol et
+        if len(personal_note) > 256:
+            messagebox.showwarning("Uyarı", "Not 256 karakteri aşamaz!")
+            return
+
+        # Yaş filtresi
+        if not age.isdigit() or not (1 <= int(age) <= 150):
+            messagebox.showwarning("Uyarı", "Lütfen 1 ile 150 arasında bir yaş giriniz!")
+            return
+
         try:
             conn = sqlite3.connect("customers.db")
             cursor = conn.cursor()
 
             cursor.execute('''INSERT INTO customers (name, tc_kimlik, phone, email, address, age, gender, personal_note)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', 
-                           (name, tc_kimlik, phone, email, address, age, gender, personal_note))
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', 
+                        (name, tc_kimlik, phone, email, address, age, gender, personal_note))
 
             conn.commit()
             messagebox.showinfo("Başarılı", "Müşteri başarıyla eklendi!")
+
+            
+        except sqlite3.IntegrityError:
+            messagebox.showerror("Hata", "TC kimlik zaten mevcut!")
         except Exception as e:
-            messagebox.showerror("Hata", f"TC kimlik zaten mevcut!")
+            messagebox.showerror("Hata", f"Bir hata oluştu: {e}")
         finally:
             conn.close()
+
 
     def search_customer(self):
         # Müşteri arama fonksiyonu
@@ -194,6 +209,11 @@ class CustomerEdit(ctk.CTkFrame):
         gender = self.gender_var.get()
         personal_note = self.entry_note.get()
 
+        # personal_note uzunluğunu kontrol et
+        if len(personal_note) > 256:
+            messagebox.showwarning("Uyarı", "Not 256 karakteri aşamaz!")
+            return
+
         try:
             conn = sqlite3.connect("customers.db")
             cursor = conn.cursor()
@@ -206,7 +226,7 @@ class CustomerEdit(ctk.CTkFrame):
             conn.commit()
             messagebox.showinfo("Başarılı", "Müşteri başarıyla güncellendi!")
         except Exception as e:
-            messagebox.showerror("Hata", f"Müşteri güncellenemedi!")
+            messagebox.showerror("Hata", f"Müşteri güncellenemedi: {e}")
         finally:
             conn.close()
 
